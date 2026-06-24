@@ -3,11 +3,17 @@ package com.ziroau.lib.helpers
 import com.ziroau.lib.classes.BaseBlockItem
 import com.ziroau.lib.classes.BaseItem
 import com.ziroau.lib.data.Id
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.block.Block
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
+import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.util.Identifier
 
 object RegistryHelpers {
@@ -87,5 +93,44 @@ object RegistryHelpers {
         )
         registerItem(baseBlockItem)
         return r
+    }
+
+    /**
+     * Registers an Item Group (Creative Tab) under the provided namespace and path with some items.
+     * @param tabId Identifier to set for the new item group
+     * @param icon The icon for the item group
+     * @param itemsToAdd The set of items to add to the item group
+     * @return The registered `ItemGroup` object
+     */
+    fun registerSimpleItemGroup(tabId: Id, icon: ItemStack, itemsToAdd: Set<Item>): ItemGroup {
+        return Registry.register(
+            Registries.ITEM_GROUP,
+            makeId(tabId),
+            FabricItemGroup.builder()
+                .displayName(TranslationHelpers.translation("itemGroup", tabId))
+                .icon { icon }
+                .entries { _, entries ->
+                    itemsToAdd.forEach {
+                        entries.add(it)
+                    }
+                }
+                .build()
+        )
+    }
+    fun registerSimpleItemGroup(namespace: String, path: String, icon: ItemStack, itemsToAdd: Set<Item>): ItemGroup {
+        return registerSimpleItemGroup(Id(namespace, path), icon, itemsToAdd)
+    }
+
+    /**
+     * Adds an item to an existing item group (creative tab) at runtime. Useful for adding items to vanilla tabs or other mod tabs.
+     */
+    fun addToItemGroup(tabId: Id, item: Item, itemGroup: ItemGroup) {
+        val targetGroupKey = RegistryKey.of(RegistryKeys.ITEM_GROUP, makeId(tabId))
+        ItemGroupEvents.modifyEntriesEvent(targetGroupKey).register { entries ->
+            entries.add(item)
+        }
+    }
+    fun addToItemGroup(namespace: String, path: String, item: Item, itemGroup: ItemGroup) {
+        addToItemGroup(Id(namespace, path), item, itemGroup)
     }
 }
