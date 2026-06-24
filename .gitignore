@@ -1,0 +1,40 @@
+# gradle
+!gradle-wrapper.jar
+**/.gradle
+**/build
+**/out
+**/classes
+**/.cache
+**/bin
+**/.kotlin
+
+# allow package folders named "classes" under src
+!src/**/classes/
+!src/**/classes/**
+
+# eclipse
+*.launch
+
+# idea
+**/.idea
+*.iml
+*.ipr
+*.iws
+
+# fabric
+**/run
+
+# java
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+
+# export
+*.zip
+
+# tools
+*.exe
+
+# macos
+*.DS_Store

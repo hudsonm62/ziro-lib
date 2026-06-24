@@ -1,0 +1,14 @@
+{
+    "trailingComma": "none",
+    "endOfLine": "lf",
+    "useTabs": false,
+    "tabWidth": 2,
+    "overrides": [
+        {
+            "files": ["*.json", ".prettierrc", "*.jsonc", "*.mcmeta"],
+            "options": {
+                "tabWidth": 4
+            }
+        }
+    ]
+}
