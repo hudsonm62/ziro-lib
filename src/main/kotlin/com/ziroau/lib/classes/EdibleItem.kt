@@ -7,7 +7,6 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundEvent
 import net.minecraft.util.UseAction
-import net.minecraft.world.World
 
 data class FoodEffect(
     val effect: StatusEffectInstance,
@@ -25,7 +24,6 @@ data class FoodEffect(
  * @param useAction The action performed when using the item (e.g., EAT or DRINK) - You probably don't want anything else for this.
  * @param useTicks Time (in ticks) it takes for the item to be consumed (or technically, used).
  * @param customEatSound Overridden sound to play on eat, you usually won't need it as this should be set automatically by `useAction`.
- * @param onEaten Callback function invoked when the item is eaten, allowing custom behavior before returning the stack.
  */
 open class EdibleItem(
     namespace: String,
@@ -39,7 +37,6 @@ open class EdibleItem(
     var useAction: UseAction? = null,
     var useTicks: Int? = null,
     var customEatSound: SoundEvent? = null,
-    var onEaten: ((stack: ItemStack, world: World, user: LivingEntity) -> Unit)? = null
 ) : BaseItem(
     Id(namespace, id),
     settings.food(
@@ -47,7 +44,8 @@ open class EdibleItem(
             nutrition,
             saturationModifier,
             isSnack,
-            isAlwaysEdible
+            isAlwaysEdible,
+            statusEffects
         )
     )
 ) {
@@ -56,32 +54,21 @@ open class EdibleItem(
             nutrition: Int,
             saturationModifier: Float,
             isSnack: Boolean,
-            isAlwaysEdible: Boolean
+            isAlwaysEdible: Boolean,
+            statusEffects: List<FoodEffect>
         ): FoodComponent {
             val builder = FoodComponent.Builder()
             if (nutrition != 0) builder.nutrition(nutrition)
             if (saturationModifier != 0.0f) builder.saturationModifier(saturationModifier)
             if (isSnack) builder.snack()
             if (isAlwaysEdible) builder.alwaysEdible()
+            if (statusEffects.isNotEmpty()) statusEffects.forEach { builder.statusEffect(it.effect, it.chance) }
             return builder.build()
         }
     }
 
     override fun getUseAction(stack: ItemStack): UseAction {
         return useAction ?: super.getUseAction(stack)
-    }
-
-    override fun finishUsing(stack: ItemStack, world: World, user: LivingEntity): ItemStack {
-        val resultStack = super.finishUsing(stack, world, user)
-        if (!world.isClient) {
-            statusEffects.forEach { foodEffect ->
-                if (world.random.nextFloat() <= foodEffect.chance) {
-                    user.addStatusEffect(StatusEffectInstance(foodEffect.effect))
-                }
-            }
-            onEaten?.invoke(stack, world, user)
-        }
-        return resultStack
     }
 
     override fun getMaxUseTime(stack: ItemStack, user: LivingEntity): Int {
