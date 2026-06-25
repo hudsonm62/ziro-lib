@@ -129,14 +129,14 @@ object RegistryHelpers {
     /**
      * Adds an item to an existing item group (creative tab) at runtime. Useful for adding items to vanilla tabs or other mod tabs.
      */
-    fun addToItemGroup(tabId: Id, item: Item, itemGroup: ItemGroup) {
+    fun addToItemGroup(tabId: Id, item: Item) {
         val targetGroupKey = RegistryKey.of(RegistryKeys.ITEM_GROUP, makeId(tabId))
         ItemGroupEvents.modifyEntriesEvent(targetGroupKey).register { entries ->
             entries.add(item)
         }
     }
-    fun addToItemGroup(namespace: String, path: String, item: Item, itemGroup: ItemGroup) {
-        addToItemGroup(Id(namespace, path), item, itemGroup)
+    fun addToItemGroup(namespace: String, path: String, item: Item) {
+        addToItemGroup(Id(namespace, path), item)
     }
 
     /**
