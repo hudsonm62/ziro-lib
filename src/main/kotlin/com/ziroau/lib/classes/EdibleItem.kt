@@ -1,17 +1,12 @@
 package com.ziroau.lib.classes
 
 import com.ziroau.lib.data.Id
+import com.ziroau.lib.data.ItemStatusEffect
 import net.minecraft.component.type.FoodComponent
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundEvent
 import net.minecraft.util.UseAction
-
-data class FoodEffect(
-    val effect: StatusEffectInstance,
-    val chance: Float = 1.0f
-)
 
 /**
  * Constructs an `Item` that can be "eaten" to restore hunger and saturation, and optionally apply status effects.
@@ -32,7 +27,7 @@ open class EdibleItem(
     saturationModifier: Float,
     isSnack: Boolean = false,
     isAlwaysEdible: Boolean = false,
-    var statusEffects: List<FoodEffect> = emptyList(),
+    var statusEffects: List<ItemStatusEffect> = emptyList(),
     var useAction: UseAction? = null,
     var useTicks: Int? = null,
     var customEatSound: SoundEvent? = null,
@@ -54,7 +49,7 @@ open class EdibleItem(
             saturationModifier: Float,
             isSnack: Boolean,
             isAlwaysEdible: Boolean,
-            statusEffects: List<FoodEffect>
+            statusEffects: List<ItemStatusEffect>
         ): FoodComponent {
             val builder = FoodComponent.Builder()
             if (nutrition != 0) builder.nutrition(nutrition)
