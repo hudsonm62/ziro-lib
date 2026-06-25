@@ -3,8 +3,12 @@ package com.ziroau.lib.helpers
 import com.ziroau.lib.classes.BaseBlockItem
 import com.ziroau.lib.classes.BaseItem
 import com.ziroau.lib.data.Id
+import net.fabricmc.api.EnvType.CLIENT
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper.registerBuiltinResourcePack
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType
+import net.fabricmc.loader.api.FabricLoader.getInstance
 import net.minecraft.block.Block
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
@@ -14,6 +18,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 object RegistryHelpers {
@@ -132,5 +137,47 @@ object RegistryHelpers {
     }
     fun addToItemGroup(namespace: String, path: String, item: Item, itemGroup: ItemGroup) {
         addToItemGroup(Id(namespace, path), item, itemGroup)
+    }
+
+    /**
+     * Registers a built-in resource pack for the mod. This should be called during initialization.
+     *
+     * The path in which the resource pack is located is in the mod JAR file under the "`resourcepacks/<id path>`" directory. `<id path>` being the path specified
+     * in the identifier of this built-in resource pack.
+     *
+     * @param resourcePackId The ID of the Resource Pack
+     * @param activationType The activation type of the resource pack - "NORMAL" by default.
+     * @param displayName A display name for your pack - Defaults to a `Text.translatable` key, which should be left default for localization.
+     * @return `true` if successfully registered the resource pack, else `false`
+     */
+    fun registerResourcePack(
+        resourcePackId: Id,
+        activationType: ResourcePackActivationType = ResourcePackActivationType.NORMAL,
+        displayName: Text = TranslationHelpers.translation("resourcePack", resourcePackId)
+    ): Boolean {
+        val instance = getInstance()
+        if (instance.environmentType == CLIENT) {
+            val container = instance.getModContainer(resourcePackId.namespace).orElse(null)
+            if (container != null) {
+                return registerBuiltinResourcePack(
+                    RegistryHelpers.makeId(resourcePackId),
+                    container,
+                    displayName,
+                    activationType
+                )
+            }
+        }
+        return false
+    }
+    fun registerResourcePack(
+        namespace: String, path: String,
+        activationType: ResourcePackActivationType = ResourcePackActivationType.NORMAL,
+        displayName: Text = TranslationHelpers.translation("resourcePack", namespace, path)
+    ): Boolean {
+        return registerResourcePack(
+            Id(namespace, path),
+            activationType,
+            displayName
+        )
     }
 }
