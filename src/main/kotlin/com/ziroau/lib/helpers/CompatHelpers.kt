@@ -1,6 +1,5 @@
 package com.ziroau.lib.helpers
 
-import com.ziroau.lib.helpers.CompatHelpers.isLoaded
 import net.fabricmc.loader.api.FabricLoader
 
 object CompatHelpers {
@@ -22,8 +21,7 @@ object CompatHelpers {
      */
     fun runIfLoaded(
         modId: String,
-        action: () -> Unit,
-        otherwise: (() -> Unit)? = null
+        action: () -> Unit, otherwise: (() -> Unit)? = null
     ) {
         if (isLoaded(modId)) {
             action()
