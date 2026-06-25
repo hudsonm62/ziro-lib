@@ -16,6 +16,7 @@ object TranslationHelpers {
     fun translationKey(type: String, id: Id): String {
         return "$type.${id.namespace}.${id.path}"
     }
+
     fun translationKey(type: String, namespace: String, path: String): String {
         return "$type.$namespace.$path"
     }

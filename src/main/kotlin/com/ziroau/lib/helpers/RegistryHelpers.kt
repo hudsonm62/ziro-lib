@@ -122,6 +122,7 @@ object RegistryHelpers {
                 .build()
         )
     }
+
     fun registerSimpleItemGroup(namespace: String, path: String, icon: ItemStack, itemsToAdd: Set<Item>): ItemGroup {
         return registerSimpleItemGroup(Id(namespace, path), icon, itemsToAdd)
     }
@@ -135,6 +136,7 @@ object RegistryHelpers {
             entries.add(item)
         }
     }
+
     fun addToItemGroup(namespace: String, path: String, item: Item) {
         addToItemGroup(Id(namespace, path), item)
     }
@@ -169,6 +171,7 @@ object RegistryHelpers {
         }
         return false
     }
+
     fun registerResourcePack(
         namespace: String, path: String,
         activationType: ResourcePackActivationType = ResourcePackActivationType.NORMAL,

@@ -11,6 +11,8 @@ it (and can remove it if you have it).
 
 This library exists for my own projects, so I generally will not add features unless I need them across multiple mods.
 
+It should also be noted this library is written purely in Kotlin, with no _real_ regard for direct Java compatibility (unless required by i.e. mixins).
+
 If you are looking for a more general-purpose utility library, I recommend checking out something
 like [owo-lib](https://modrinth.com/project/ccKDOlHs) or [Collective](https://modrinth.com/project/e0M1UDsY), because
 this is not intended to be that.

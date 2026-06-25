@@ -19,7 +19,7 @@
         "fabric-api": "*",
         "fabric-language-kotlin": "*"
     },
-    "recommends": {
+    "suggests": {
         "modmenu": "*"
     },
     "custom": {

@@ -9,13 +9,6 @@ plugins {
 version = providers.gradleProperty("mod_version").get()
 group = providers.gradleProperty("maven_group").get()
 
-repositories {
-    maven {
-        name = "Terraformers"
-        url = uri("https://maven.terraformersmc.com/")
-    }
-}
-
 dependencies {
     minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
     mappings("net.fabricmc:yarn:${providers.gradleProperty("yarn_mappings").get()}:v2")
@@ -24,7 +17,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${providers.gradleProperty("fabric_kotlin_version").get()}")
 
-    modCompileOnly("com.terraformersmc:modmenu:${providers.gradleProperty("modmenu_version").get()}")
+    //modCompileOnly("com.terraformersmc:modmenu:${providers.gradleProperty("modmenu_version").get()}")
 }
 
 tasks.processResources {
@@ -48,7 +41,6 @@ kotlin {
 
 java {
     withSourcesJar()
-    //withJavadocJar()
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
 }
