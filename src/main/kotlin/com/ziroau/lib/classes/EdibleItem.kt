@@ -26,8 +26,7 @@ data class FoodEffect(
  * @param customEatSound Overridden sound to play on eat, you usually won't need it as this should be set automatically by `useAction`.
  */
 open class EdibleItem(
-    namespace: String,
-    id: String,
+    id: Id,
     settings: Settings,
     nutrition: Int,
     saturationModifier: Float,
@@ -38,7 +37,7 @@ open class EdibleItem(
     var useTicks: Int? = null,
     var customEatSound: SoundEvent? = null,
 ) : BaseItem(
-    Id(namespace, id),
+    id,
     settings.food(
         buildFoodComponent(
             nutrition,
