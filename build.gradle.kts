@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     `maven-publish`
     id("net.fabricmc.fabric-loom-remap")
-    id("org.jetbrains.kotlin.jvm") version "2.4.0"
+    id("org.jetbrains.kotlin.jvm") version "2.4.21"
 }
 
 version = providers.gradleProperty("mod_version").get()
